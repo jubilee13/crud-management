@@ -3,24 +3,27 @@ on:
   push:
     branches: ["staging"]
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     environment: staging
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Setup JDK
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: 'maven'
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
       - name: Create application.yml
         run: |
           mkdir -p src/main/resources
           echo "${APPLICATION_YML}" > src/main/resources/application.yml
         env:
           APPLICATION_YML: ${{ secrets.APPLICATION_YML }}
-      - name: Run unit test
+
+      - name: Run tests
         run: mvn test
