@@ -1,0 +1,20 @@
+name: CI
+on:
+  push:
+    branches: ["staging" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        run: actions/checkout@v5
+
+      - name: Setup JDK
+        run: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Run unit test
+        run: mvn test
