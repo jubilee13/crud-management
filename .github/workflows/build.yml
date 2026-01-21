@@ -1,10 +1,11 @@
 name: CI
 on:
   push:
-    branches: ["staging" ]
+    branches: ["staging"]
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: staging
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -15,6 +16,11 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
-
+      - name: Create application.yml
+        run: |
+          mkdir -p src/main/resources
+          echo "${APPLICATION_YML}" > src/main/resources/application.yml
+        env:
+          APPLICATION_YML: ${{ secrets.APPLICATION_YML }}
       - name: Run unit test
         run: mvn test
